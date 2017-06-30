@@ -12,8 +12,8 @@ Install
 			
 3.) Web.Config
 		
-		Add Connection String
-		Add CasHost key
+    Add Connection String
+    Add CasHost key
     Add TestEmailAddress key - This is used when debug mode is turned on
 		
 4.) Run the following SQL command to initialize an administrator - replace ADMIN_USER_PIDM with the pidm of any admin accounts:
