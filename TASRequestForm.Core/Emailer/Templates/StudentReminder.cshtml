@@ -1,0 +1,21 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model TestTime
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <p>
+        @Model.FormEntry.StudentIdentity.FirstName @Model.FormEntry.StudentIdentity.LastName,
+        <br /><br />
+        This is an automated reminder that you scheduled a test <em>@Model.Title</em> for course <em>@Model.FormEntry.Course</em> on <strong>@Model.Date.ToString()</strong>.
+    </p>
+    <p>
+        If you will not be taking the exam at this time please <a href="https://webapp.cortland.edu/TASRequestForm/Student/Pending">cancel the request</a>.
+    </p>
+    <p>
+        You may always <a href="https://webapp.cortland.edu/TasRequestForm">view all of your student requests</a>.
+    </p>
+</body>
+</html>

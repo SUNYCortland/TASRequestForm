@@ -1,0 +1,408 @@
+﻿@model TASRequestForm.Web.ViewModels.HomeIndexViewModel
+
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid cort-white">
+    <div class="container">
+            <div class="row" style="margin-top: 20px">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    @{ Html.RenderAction("LoadMenu", "Nav", new { active = "home" }); }
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                    @if (Model.StudentEntries.Count > 0)
+                    {
+                        <h2 class="page-header" style="margin-top: 0;">Recent Pending Requests</h2>
+                        if (Model.StudentEntries.Where(x => !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).Count() > 0)
+                        {
+                        <table class="table table-bordered table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Course</th>
+                                    <th>Instructor</th>
+                                    <th>Status</th>
+                                    <th>Test</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var testTime in Model.StudentEntries.Where(x => !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).OrderBy(x => x.Date).Take(5))
+                                {
+                                    <tr>
+                                        <td>@testTime.FormEntry.Course</td>
+                                        <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                        <td>
+                                            @if (testTime.Canceled)
+                                            {
+                                                <span class="label label-danger">Canceled</span>
+                                            }
+                                            else
+                                            {
+                                                if (!testTime.FormEntry.ProfessorApprovedDate.HasValue)
+                                                {
+                                                    <span class="label label-warning">Requires Instructor Approval</span>
+                                                }
+                                                else if (!testTime.FormEntry.ApprovedDate.HasValue)
+                                                {
+                                                    <span class="label label-primary">Requires TAS Approval</span>
+                                                }
+                                            }
+                                        </td>
+                                        <td>
+                                            @testTime.Title - @testTime.Date.ToString()
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("Request", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                            @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                            {
+                                                <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                            }
+                                            else
+                                            {
+                                                <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no pending requests.
+                            </p>
+                        }
+
+                        <h2 class="page-header">Recent Approved Requests</h2>
+
+                        if (Model.StudentEntries.Where(x => x.FormEntry.TASApproved && x.Date.Date >= DateTime.Now.Date).Count() > 0)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Instructor</th>
+                                        <th>Status</th>
+                                        <th>Test</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testTime in Model.StudentEntries.Where(x => x.FormEntry.TASApproved && x.Date.Date >= DateTime.Now.Date).OrderByDescending(x => x.Date).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@testTime.FormEntry.Course</td>
+                                            <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                            <td>
+                                                @if (testTime.Canceled)
+                                                {
+                                                    <span class="label label-danger">Canceled</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">Approved</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @testTime.Title - @testTime.Date.ToString()
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Request", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                                @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no approved requests.
+                            </p>
+                        }
+
+                        <h2 class="page-header">Recent Declined Requests</h2>
+
+                        if (Model.StudentEntries.Where(x => (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue) && x.Date.Date >= DateTime.Now.Date).Count() > 0)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Instructor</th>
+                                        <th>Status</th>
+                                        <th>Test</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testTime in Model.StudentEntries.Where(x => (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue) && x.Date.Date >= DateTime.Now.Date).OrderByDescending(x => x.Date).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@testTime.FormEntry.Course</td>
+                                            <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                            <td>
+                                                <span class="label label-danger">Declined</span>
+                                            </td>
+                                            <td>
+                                                @testTime.Title - @testTime.Date.ToString()
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("Request", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no declined requests.
+                            </p>
+                        }
+                    }
+                    else if (Model.ProfessorEntries.Count > 0)
+                    {
+                        <h2 class="page-header" style="margin-top: 0;">Recent Pending Requests</h2>
+                        if (Model.ProfessorEntries.Where(x => !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).Count() > 0)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Student</th>
+                                        <th>Status</th>
+                                        <th>Test</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testTime in Model.ProfessorEntries.Where(x => !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).OrderByDescending(x => x.Date).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@testTime.FormEntry.Course</td>
+                                            <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                            <td>
+                                                @if (testTime.Canceled)
+                                                {
+                                                    <span class="label label-danger">Canceled</span>
+                                                }
+                                                else
+                                                {
+                                                    if (!testTime.FormEntry.ProfessorApprovedDate.HasValue)
+                                                    {
+                                                        <span class="label label-warning">Requires Instructor Approval</span>
+                                                    }
+                                                    else if (!testTime.FormEntry.ApprovedDate.HasValue)
+                                                    {
+                                                        <span class="label label-primary">Requires TAS Approval</span>
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @testTime.Title - @testTime.Date.ToString()
+                                            </td>
+                                            <td>
+                                                @if (!testTime.FormEntry.ProfessorApprovedDate.HasValue)
+                                                {
+                                                    <a href="@Url.Action("Request", new { controller = "Instructor", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                                }
+                                                else if (!testTime.FormEntry.ApprovedDate.HasValue)
+                                                {
+                                                    <a href="@Url.Action("View", new { controller = "Instructor", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                                }
+                                                @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Request", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Request", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no pending requests.
+                            </p>
+                        }
+
+                        <h2 class="page-header">Recent Approved Requests</h2>
+
+                        if (Model.ProfessorEntries.Where(x => x.FormEntry.ProfessorApproved && x.FormEntry.TASApproved && x.Date.Date >= DateTime.Now.Date).Count() > 0)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Student</th>
+                                        <th>Status</th>
+                                        <th>Test</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testTime in Model.ProfessorEntries.Where(x => x.FormEntry.ProfessorApproved && x.FormEntry.TASApproved && x.Date.Date >= DateTime.Now.Date).OrderByDescending(x => x.Date).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@testTime.FormEntry.Course</td>
+                                            <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                            <td>
+                                                @if (testTime.Canceled)
+                                                {
+                                                    <span class="label label-danger">Canceled</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="label label-success">Approved</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                @testTime.Title - @testTime.Date.ToString()
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("View", new { controller = "Instructor", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                                @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Request", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Cancel", new { controller = "Request", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no approved requests.
+                            </p>
+                        }
+
+                        <h2 class="page-header">Recent Declined Requests</h2>
+
+                        if (Model.ProfessorEntries.Where(x => (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue) && x.Date.Date >= DateTime.Now.Date).Count() > 0)
+                        {
+                            <table class="table table-bordered table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Course</th>
+                                        <th>Student</th>
+                                        <th>Status</th>
+                                        <th>Test</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var testTime in Model.ProfessorEntries.Where(x => (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue) && x.Date.Date >= DateTime.Now.Date).OrderByDescending(x => x.Date).Take(5))
+                                    {
+                                        <tr>
+                                            <td>@testTime.FormEntry.Course</td>
+                                            <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                            <td>
+                                                <span class="label label-danger">Declined</span>
+                                            </td>
+                                            <td>
+                                                @testTime.Title - @testTime.Date.ToString()
+                                            </td>
+                                            <td>
+                                                <a href="@Url.Action("View", new { controller = "Instructor", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        }
+                        else
+                        {
+                            <p>
+                                You currently have no declined requests.
+                            </p>
+                        }
+                    }
+                    else
+                    {
+                        <h2 class="page-header" style="margin-top: 0;">Recent Pending Requests</h2>
+                        <p>
+                            You currently have no pending requests.
+                        </p>
+                        <h2 class="page-header" style="margin-top: 0;">Recent Approved Requests</h2>
+                        <p>
+                            You currently have no approved requests.
+                        </p>
+                        <h2 class="page-header" style="margin-top: 0;">Recent Declined Requests</h2>
+                        <p>
+                            You currently have no declined requests.
+                        </p>
+                    }
+                </div>
+            </div>
+    </div>
+</div>
+<div id="alert" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtTestId" />
+                <p>Are you sure you want to cancel this test?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-success" id="btnSaveChanges">Yes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#alert").modal({
+                show: false
+            });
+
+            $(".btnCancel").on("click", function (e) {
+                e.preventDefault();
+
+                $("#txtTestId").val($(this).attr("data-testid"));
+                $("#alert").modal("show");
+            });
+
+            $("#btnSaveChanges").on("click", function () {
+                $.ajax({
+                    url: "@Url.Action("Cancel", new { controller = "Request" })/" + $("#txtTestId").val(),
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data) {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

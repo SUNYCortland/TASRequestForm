@@ -1,0 +1,237 @@
+﻿@model TASRequestForm.Web.Areas.Admin.ViewModels.HomeIndexViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                @{ Html.RenderAction("LoadMenu", "Nav", new { active = "home", area = "Admin" }); }
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <h2 class="page-header" style="margin-top: 0;">
+                    Recent Pending Requests
+                </h2>
+                @if (Model.Pending.Count > 0)
+                {
+                <table class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Instructor</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Test</th>
+                            <th style="width: 185px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var testTime in Model.Pending)
+                        {
+                            <tr>
+                                <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                <td>@testTime.FormEntry.Course</td>
+                                <td>
+                                    @if (testTime.Canceled)
+                                    {
+                                        <span class="label label-danger">Canceled</span>
+                                    }
+                                    else
+                                    {
+                                        if (!testTime.FormEntry.ProfessorApprovedDate.HasValue)
+                                        {
+                                            <span class="label label-warning">Requires Instructor Approval</span>
+                                        }
+                                        else if (!testTime.FormEntry.ApprovedDate.HasValue)
+                                        {
+                                            <span class="label label-primary">Requires TAS Approval</span>
+                                        }
+                                    }
+                                </td>
+                                <td>
+                                    @testTime.Title - @testTime.Date.ToString()
+                                </td>
+                                <td>
+                                    @if (!testTime.FormEntry.ProfessorApprovedDate.HasValue)
+                                    {
+                                        <a href="@Url.Action("InstructorApprove", new { controller = "Requests", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                    }
+                                    else if (!testTime.FormEntry.ApprovedDate.HasValue)
+                                    {
+                                        <a href="@Url.Action("TASApprove", new { controller = "Requests", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                    }
+                                    @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                    {
+                                        <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                }
+                else
+                {
+                <p>
+                    You currently have no pending requests.
+                </p>
+                }
+                <h2 class="page-header" style="margin-top: 0;">
+                    Recent Approved Requests
+                </h2>
+                @if (Model.Approved.Count > 0)
+                {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Instructor</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Test</th>
+                                <th style="width: 185px">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var testTime in Model.Approved)
+                            {
+                                <tr>
+                                    <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                    <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                    <td>@testTime.FormEntry.Course</td>
+                                    <td>
+                                        @if (testTime.Canceled)
+                                        {
+                                            <span class="label label-danger">Canceled</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">Approved</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @testTime.Title - @testTime.Date.ToString()
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("View", new { controller = "Requests", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                        @if (testTime.Date >= DateTime.Now && !testTime.Canceled)
+                                        {
+                                            <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@testTime.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Cancel", new { controller = "Student", id = testTime.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>
+                        You currently have no approved requests.
+                    </p>
+                }
+                <h2 class="page-header" style="margin-top: 0;">
+                    Recent Declined Requests
+                </h2>
+                @if (Model.Declined.Count > 0)
+                {
+                    <table class="table table-bordered table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Instructor</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Test</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var testTime in Model.Declined)
+                            {
+                                <tr>
+                                    <td>@testTime.FormEntry.StudentIdentity.LastName, @testTime.FormEntry.StudentIdentity.FirstName</td>
+                                    <td>@testTime.FormEntry.ProfessorIdentity.LastName, @testTime.FormEntry.ProfessorIdentity.FirstName</td>
+                                    <td>@testTime.FormEntry.Course</td>
+                                    <td>
+                                        <span class="label label-danger">Declined</span>
+                                    </td>
+                                    <td>
+                                        @testTime.Title - @testTime.Date.ToString()
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("View", new { controller = "Requests", id = testTime.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p>
+                        You currently have no declined requests.
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtTestId" />
+                <p>Are you sure you want to cancel this test?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-success" id="btnSaveChanges">Yes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#alert").modal({
+            show: false
+        });
+
+        $(".btnCancel").on("click", function (e) {
+            e.preventDefault();
+
+            $("#txtTestId").val($(this).attr("data-testid"));
+            $("#alert").modal("show");
+        });
+
+        $("#btnSaveChanges").on("click", function () {
+            $.ajax({
+                url: "@Url.Action("Cancel", new { controller = "Request", area = "" })/" + $("#txtTestId").val(),
+                type: "GET",
+                dataType: "JSON",
+                success: function (data) {
+                    if (data) {
+                        location.reload();
+                    }
+                }
+            });
+        });
+    })
+    </script>
+}

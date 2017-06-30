@@ -1,0 +1,26 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+@{
+    ViewBag.Title = "TASSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <div class="alert alert-success">
+                    <h2>Success!</h2>
+                    <p>
+                        You have approved a Test Administration Services Request from the student
+                        <em>@Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName</em> for the course <em>@Model.Course</em>.
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Index", new { controller = "Home", area = "Admin" })">&laquo; Back to the dashboard</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

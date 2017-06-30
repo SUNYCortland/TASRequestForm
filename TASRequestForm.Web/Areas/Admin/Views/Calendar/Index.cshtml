@@ -1,0 +1,41 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles {
+    @Styles.Render("~/bundles/css/calendar")
+}
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                @{ Html.RenderAction("LoadMenu", "Nav", new { active = "calendar", area = "Admin" }); }
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <strong>Key:</strong>
+                <span class="label label-default">canceled/denied</span>
+                <span class="label label-warning">instructor approval</span>
+                <span class="label label-primary">TAS approval</span>
+                <span class="label label-success">approved</span>
+                <div id="calendar" style="margin-top: 15px"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+@Scripts.Render("~/bundles/js/calendar")
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#calendar").fullCalendar({
+            header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: false,
+            events: "@Url.Action("GetCalendarTimes")"
+        });
+    })
+</script>
+}

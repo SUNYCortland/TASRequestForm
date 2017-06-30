@@ -1,0 +1,696 @@
+﻿@model TASRequestForm.Web.ViewModels.RequestIndexViewModel
+
+@{
+    ViewBag.Title = "Request";
+}
+@section styles {
+    @Styles.Render("~/bundles/css/timepicker")
+}
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "request-form" }))
+{
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                @{ Html.RenderAction("LoadMenu", "Nav", new { active = "submit" }); }
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <h1 class="page-header">Test Administration Services (TAS) Request Form</h1>
+                @if (!ViewData.ModelState.IsValid)
+                {
+                    <div class="alert alert-danger">
+                        <p>Please correct all errors highlighted below before submitting the form.</p>
+                    </div>
+                }
+                <fieldset>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="txtStudentName" class="control-label">Student Name:</label>
+                                        <input type="text" id="txtStudentName" class="form-control" value="@User.BannerIdentity.FirstName @User.BannerIdentity.LastName" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="txtStudentCNumber" class="control-label">C#:</label>
+                                        <input type="text" id="txtStudentCNumber" class="form-control" value="@User.BannerIdentity.CNumber" readonly />
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.FormEntry.PhoneNumber, new { @class = "control-label" })
+                                        @if (Model.PreviousFormEntry != null)
+                                        {
+                                            @Html.TextBoxFor(x => x.FormEntry.PhoneNumber, new { @class = "form-control", placeholder = "xxx-xxx-xxxx", @Value = Model.PreviousFormEntry.PhoneNumber })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(x => x.FormEntry.PhoneNumber, new { @class = "form-control", placeholder = "xxx-xxx-xxxx" })
+                                        }
+                                        @Html.ValidationMessageFor(x => x.FormEntry.PhoneNumber)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        @Html.LabelFor(x => x.FormEntry.Course, new { @class = "control-label" })
+                                        @Html.DropDownListFor(x => x.SelectedCourse, Model.Courses, "Select a course...", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(x => x.SelectedCourse)
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <label for="FormEntry_CourseTime" class="control-label">Class times</label>
+                                        @Html.TextBoxFor(x => x.FormEntry.CourseTime, new { @class = "form-control", placeholder = "Please select a course first...", @readonly = "readonly" })
+                                        @Html.ValidationMessageFor(x => x.FormEntry.CourseTime)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <label class="control-label">Accommodations</label>
+                            <div class="checkbox small">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.MinimalDistractionsExtendedTime) Minimal Distractions &amp; Extended Time
+                                </label>
+                            </div>
+                            <div class="checkbox small">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.WordProcessor) Word Processor
+                                </label>
+                            </div>
+                            <div class="checkbox small">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.TextToSpeech) Text-to-Speech
+                                </label>
+                            </div>
+                            <div class="checkbox small">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.OtherAccomodations) Other
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                @if (Model.OtherAccomodations)
+                                {
+                                    @Html.TextBoxFor(x => x.OtherAccomodationsValue, new { @class = "form-control", placeholder = "Please describe your other accomodations..." })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(x => x.OtherAccomodationsValue, new { @class = "form-control", placeholder = "Please describe your other accomodations...", style = "display: none;" })
+                                }
+                                @Html.ValidationMessageFor(x => x.OtherAccomodationsValue)
+                                @Html.ValidationMessageFor(x => x.AccomodationSelected)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <hr style="margin-top: 0px;" />
+                            <center>
+                                @Html.Raw(HttpUtility.HtmlDecode(Html.ValidationMessageFor(x => x.FormEntry.TestTimes).ToHtmlString()))
+                            </center>
+                        </div>
+                        <div class="col-lg-12" data-bind="visible: CourseTimeMismatch">
+                            <div class="alert alert-warning">
+                                <p>
+                                    You may still be able to take your exam at this time, but you are requesting to take your exam at a time that differs from the rest of the class. Please leave a note for your instructor on this page explaining why you have entered a time different from the rest of the class and then submit the form. You also may wish to speak with your instructor about this face-to-face if you have not done so already.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-12" data-bind="visible: ConflictingTime">
+                            <div class="alert alert-warning">
+                                <p>
+                                    You are requesting to take your exam at a time that is closely scheduled with another request. Please ensure that you are giving yourself sufficient time between exams.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <center>Quizzes</center>
+                                            <p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p>
+                                            <p class="field-validation-error" style="font-weight: normal" data-bind="visible: QuizTimeWarning()">
+                                                You have a quiz time scheduled after 2:15 p.m. Please note that Test Administration Services closes at 4:00 p.m.  Press the 'X' button to cancel this time or you may proceed if you wish.
+                                            </p>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="if: QuizTimes().length == 0">
+                                    <tr>
+                                        <td>
+                                            You have not added any quiz times.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody data-bind="foreach: QuizTimes">
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn btn-danger fa fa-close" data-bind="click: function (testTime) { $root.RemoveTestTime(testTime, 'quiz'); }" title="Remove date &amp; time"></a>
+                                            <span data-bind="text: Title() + ' - ' + Date()"></span>
+                                            <input type="hidden" data-bind="value: Date(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Date',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Date'
+                                                                            }" />
+                                            <input type="hidden" data-bind="value: Title(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Title',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Title'
+                                                                            }" />
+                                            <input type="hidden" value="quiz" data-bind="attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Type',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Type'
+                                                                            }" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="txtQuizTitle" placeholder="Please enter the name of this quiz..." />
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="quizDatePicker">
+                                                    <input type="text" class="form-control date-mask" id="txtQuizDate" placeholder="Please enter a quiz date..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="quizTimePicker">
+                                                    <input type="text" class="form-control time-mask" id="txtQuizTime" placeholder="Please enter a quiz time..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success" data-bind="click: function () { $root.AddTestTime('quiz'); }"><span class="glyphicon glyphicon-plus"></span> Add Date &amp; Time</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <center>Exams</center>
+                                            <p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p>
+                                            <p class="field-validation-error" style="font-weight: normal" data-bind="visible: ExamTimeWarning()">
+                                                You have an exam time scheduled after 2:15 p.m. Please note that Test Administration Services closes at 4:00 p.m.  Press the 'X' button to cancel this time or you may proceed if you wish.
+                                            </p>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="if: ExamTimes().length == 0">
+                                    <tr>
+                                        <td>
+                                            You have not added any exam times.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody data-bind="foreach: ExamTimes">
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn btn-danger fa fa-close" data-bind="click: function (testTime) { $root.RemoveTestTime(testTime, 'exam'); }" title="Remove date &amp; time"></a>
+                                            <span data-bind="text: Title() + ' - ' + Date()"></span>
+                                            <input type="hidden" data-bind="value: Date(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Date',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Date'
+                                                                            }" />
+                                            <input type="hidden" data-bind="value: Title(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Title',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Title'
+                                                                            }" />
+                                            <input type="hidden" value="exam" data-bind="attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Type',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Type'
+                                                                            }" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="txtExamTitle" placeholder="Please enter the name of this exam..." />
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="examDatePicker">
+                                                    <input type="text" class="form-control date-mask" id="txtExamDate" placeholder="Please enter an exam date..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="examTimePicker">
+                                                    <input type="text" class="form-control time-mask" id="txtExamTime" placeholder="Please enter an exam time..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success" data-bind="click: function () { $root.AddTestTime('exam'); }"><span class="glyphicon glyphicon-plus"></span> Add Date &amp; Time</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <center>Final Exam</center>
+                                            <p class="small" style="font-weight: normal">Date &amp; Time - must be completed between 8:00 a.m. and 4:00 p.m.</p>
+                                            <p class="field-validation-error" style="font-weight: normal" data-bind="visible: FinalExamTimeWarning()">
+                                                You have a final exam time scheduled after 2:15 p.m. Please note that Test Administration Services closes at 4:00 p.m. Press the 'X' button to cancel this time or you may proceed if you wish.
+                                            </p>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody data-bind="if: FinalExamTimes().length == 0">
+                                    <tr>
+                                        <td>
+                                            You have not added a final exam time.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tbody data-bind="foreach: FinalExamTimes">
+                                    <tr>
+                                        <td>
+                                            <a href="#" class="btn btn-danger fa fa-close" data-bind="click: function (testTime) { $root.RemoveTestTime(testTime, 'final'); }" title="Remove date &amp; time"></a>
+                                            <span data-bind="text: Title() + ' - ' + Date()"></span>
+                                            <input type="hidden" data-bind="value: Date(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Date',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Date'
+                                                                            }" />
+                                            <input type="hidden" data-bind="value: Title(),
+                                                                            attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Title',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Title'
+                                                                            }" />
+                                            <input type="hidden" value="final" data-bind="attr: {
+                                                                                name: 'FormEntry.TestTimes[' + $root.TestTimes().indexOf($data) + '].Type',
+                                                                                id: 'FormEntry_TestTimes[' + $root.TestTimes().indexOf($data) + ']_Type'
+                                                                            }" />
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="txtFinalExamTitle" placeholder="Please enter the name of this final exam..." />
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="finalExamDatePicker">
+                                                    <input type="text" class="form-control date-mask" id="txtFinalExamDate" placeholder="Please enter a final exam date..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group date" id="finalExamTimePicker">
+                                                    <input type="text" class="form-control time-mask" id="txtFinalExamTime" placeholder="Please enter a final exam time..." />
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="pull-right">
+                                                <button type="button" class="btn btn-success" data-bind="click: function () { $root.AddTestTime('final'); }"><span class="glyphicon glyphicon-plus"></span> Add Date &amp; Time</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <hr style="margin-top: 0px;" />
+                            <div class="form-group">
+                                <label for="Notes" class="control-label">Notes (viewable by student, instructor, and Test Administration staff)</label>
+                                @Html.TextAreaFor(x => x.Note, new { rows = "5", placeholder = "Enter any notes you would like to attach to this request.", @class = "form-control" })
+                            </div>
+                            <div class="checkbox text-center">
+                                <label>
+                                    @Html.CheckBoxFor(x => x.NotifiedProfessor) I have picked up my accommodation letters from Disability Services and given one to this instructor.
+                                </label>
+                                <br />
+                                @Html.ValidationMessageFor(x => x.NotifiedProfessor)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 40px">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <input type="submit" class="btn btn-success" value="Submit Form" />
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div> 
+}
+@section scripts {
+@Scripts.Render("~/bundles/inputmask")
+@Scripts.Render("~/bundles/js/timepicker")
+<script type="text/javascript">
+    var TestTimesArr = @Html.Raw((new System.Web.Script.Serialization.JavaScriptSerializer().Serialize(Model.FormEntry.TestTimes)));
+
+    var TestTimeModel = function (TestTime) {
+        var self = this;
+
+        self.Type = ko.observable(TestTime ? TestTime.Type : "");
+        self.Date = ko.observable(TestTime ? TestTime.Date : "");
+        self.Title = ko.observable(TestTime ? TestTime.Title : "");
+    };
+
+    var HomeViewModel = function (TestTimes) {
+        var self = this;
+
+        self.CourseTimeMismatch = ko.observable(false);
+        self.ConflictingTime = ko.observable(false);
+
+        self.TestTimes = ko.observableArray([]);
+        self.QuizTimes = ko.observableArray([]);
+        self.ExamTimes = ko.observableArray([]);
+        self.FinalExamTimes = ko.observableArray([]);
+
+        self.QuizTimeWarning = ko.observable(false);
+        self.ExamTimeWarning = ko.observable(false);
+        self.FinalExamTimeWarning = ko.observable(false);
+
+        self.RemoveTestTime = function (testTime, type) {
+            if (type == "quiz") {
+                self.QuizTimes.remove(testTime);
+            } else if (type == "exam") {
+                self.ExamTimes.remove(testTime);
+            } else if (type == "final") {
+                self.FinalExamTimes.remove(testTime);
+            }
+
+            self.TestTimes.remove(testTime);
+        }
+
+        self.AddTestTime = function (type) {
+            if ($("#FormEntry_CourseTime").val() == "") {
+                alert("Please select a course first.");
+                return;
+            }
+            if (type == "quiz") {
+                if ($("#txtQuizTime").val() == "" || $("#txtQuizDate").val() == "" || $("#txtQuizTitle").val() == "") {
+                    return;
+                }
+
+                var testTime = {
+                    Type: type,
+                    Date: $("#txtQuizDate").val() + " " + $("#txtQuizTime").val(),
+                    Title: $("#txtQuizTitle").val()
+                }
+
+                testTime = new TestTimeModel(testTime);
+
+                self.QuizTimes.push(testTime);
+                self.TestTimes.push(testTime);
+
+                $("#txtQuizTime").val("");
+                $("#txtQuizDate").val("");
+                $("#txtQuizTitle").val("");
+            } else if (type == "exam") {
+                if ($("#txtExamTime").val() == "" || $("#txtExamDate").val() == "" || $("#txtExamTitle").val() == "") {
+                    return;
+                }
+
+                var testTime = {
+                    Type: type,
+                    Date: $("#txtExamDate").val() + " " + $("#txtExamTime").val(),
+                    Title: $("#txtExamTitle").val()
+                }
+
+                testTime = new TestTimeModel(testTime);
+
+                self.ExamTimes.push(testTime);
+                self.TestTimes.push(testTime);
+
+                $("#txtExamTime").val("");
+                $("#txtExamDate").val("");
+                $("#txtExamTitle").val("");
+            } else if (type == "final") {
+                if ($("#txtFinalExamTime").val() == "" || $("#txtFinalExamDate").val() == "" || $("#txtFinalExamTitle").val() == "") {
+                    return;
+                }
+
+                if (self.FinalExamTimes().length > 0) {
+                    alert("You can only add one Final Exam Time.");
+                    return;
+                }
+
+                var testTime = {
+                    Type: type,
+                    Date: $("#txtFinalExamDate").val() + " " + $("#txtFinalExamTime").val(),
+                    Title: $("#txtFinalExamTitle").val()
+                }
+
+                testTime = new TestTimeModel(testTime);
+
+                self.FinalExamTimes.push(testTime);
+                self.TestTimes.push(testTime);
+
+                $("#txtFinalExamTime").val("");
+                $("#txtFinalExamDate").val("");
+                $("#txtFinalExamTitle").val("");
+            }
+        }
+
+        self.CheckTime = function (time) {
+            var parts = time.split(":");
+            var hour = parseInt($.trim(parts[0]));
+            var minutes = parseInt($.trim(parts[1].split(" ")[0]));
+            var period = parts[1].split(" ")[1];
+
+            if (period == "PM") {
+                if (hour != 12)
+                    hour += 12;
+
+                var testDate = new Date(2016, 1, 1, hour, minutes, 0, 0);
+                var tasDate = new Date(2016, 1, 1, 14, 15, 0, 0);
+
+                if (testDate >= tasDate){
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        self.TestTimes.subscribe(function () {
+            var showQuizWarning = false;
+            var showExamWarning = false;
+            var showFinalExamWarning = false;
+
+            ko.utils.arrayForEach(self.TestTimes(), function (testTime) {
+                var parts = testTime.Date().split(" ");
+                var time = parts[1] + " " + parts[2];
+
+                if (!self.CheckTime(time)) {
+                    if (testTime.Type() == "quiz")
+                        showQuizWarning = true;
+                    else if(testTime.Type() == "exam")
+                        showExamWarning = true;
+                    else if(testTime.Type() == "final")
+                        showFinalExamWarning = true;
+                }
+            });
+
+            self.QuizTimeWarning(showQuizWarning);
+            self.ExamTimeWarning(showExamWarning);
+            self.FinalExamTimeWarning(showFinalExamWarning);
+        });
+
+        self.TestTimes.subscribe(function (changes) {
+            changes.forEach(function(change) {
+                if (change.status == "added") {
+                    if (change.value.Type() != "final")
+                    {
+                        $.ajax({
+                            url: "@Url.Action("CheckCourseTimeMismatch", new { controller = "Request", Area = "" })",
+                            type: "GET",
+                            dataType: "json",
+                            data: {
+                                courseTime: $("#FormEntry_CourseTime").val(),
+                                examTime: change.value.Date()
+                            },
+                            success: function (data) {
+                                self.CourseTimeMismatch(data);
+                            }
+                        });
+                    }
+
+                    $.ajax({
+                        url: "@Url.Action("GetFormEntriesWithConflictingTime", new { controller = "Request", Area = "" })",
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            time: change.value.Date()
+                        },
+                        success: function (data) {
+                            self.ConflictingTime(data);
+                        }
+                    });
+                }
+            })
+            
+        }, null, "arrayChange");
+
+        self.Initialize = function () {
+            $.each(TestTimes, function (index, testTime) {
+                testTime.Date = convertDate(testTime.Date);
+
+                var testTimeModel = new TestTimeModel(testTime);
+
+                if (testTimeModel.Type() == "quiz") {
+                    self.QuizTimes.push(testTimeModel);
+                } else if (testTimeModel.Type() == "exam") {
+                    self.ExamTimes.push(testTimeModel);
+                } else if (testTimeModel.Type() == "final") {
+                    self.FinalExamTimes.push(testTimeModel);
+                }
+
+                self.TestTimes.push(testTimeModel);
+            });
+        }
+
+        // Initialize this view model
+        self.Initialize();
+    }
+
+    $(document).ready(function () {
+        ko.applyBindings(new HomeViewModel(TestTimesArr), document.body);
+
+        $('.date-mask').inputmask({
+            mask: "1/2/y",
+            placeholder: "mm/dd/yyyy",
+            leapday: "02/29/",
+            separator: '/',
+            alias: "mm/dd/yyyy"
+        });
+
+        $('.time-mask').inputmask({
+            mask: "h:s t\\m",
+            placeholder: "hh:mm xm",
+            alias: "datetime",
+            hourFormat: "12"
+        });
+
+        $("#request-form").on("submit", function () {
+            var valid = true;
+            if ($("#txtQuizDate").val() != ""
+                || $("#txtQuizTime").val() != ""
+                || $("#txtQuizTitle").val() != ""
+                || $("#txtExamDate").val() != ""
+                || $("#txtExamTime").val() != ""
+                || $("#txtExamTitle").val() != ""
+                || $("#txtFinalExamDate").val() != ""
+                || $("#txtFinalExamTime").val() != ""
+                || $("#txtFinalExamTitle").val() != "") {
+                var valid = confirm("You have entered a test date/time but not yet clicked 'Add Date & Time'. Are you sure you want to submit?");
+            }
+
+            return valid;
+        });
+
+        $("#OtherAccomodations").on("change", function () {
+            $("#OtherAccomodationsValue").toggle();
+        });
+
+        $("#SelectedCourse").on("change", function () {
+            var selectedCourse = $(this).val();
+
+            if (selectedCourse == null || selectedCourse == "") {
+                $("#FormEntry_CourseTime").val("");
+                return;
+            }
+
+            var selectedCourseCRN = selectedCourse.split("|")[0];
+
+            $.ajax({
+                url: "@Url.Action("GetCourseMeetingInfo")/" + selectedCourseCRN,
+                dataType: "json",
+                success: function (courseMeetingInfo) {
+                    $("#FormEntry_CourseTime").val(courseMeetingInfo.DaysOfWeek + " at " + courseMeetingInfo.BeginTime + "- " + courseMeetingInfo.EndTime);
+                }
+            });
+        });
+
+        $("#finalExamDatePicker").datetimepicker({
+            format: "M/D/YYYY",
+            ignoreReadonly: true
+        });
+        $("#finalExamTimePicker").datetimepicker({
+            format: "LT",
+            ignoreReadonly: true
+        });
+        $("#examDatePicker").datetimepicker({
+            format: "M/D/YYYY",
+            ignoreReadonly: true
+        });
+        $("#examTimePicker").datetimepicker({
+            format: "LT",
+            ignoreReadonly: true
+        });
+        $("#quizDatePicker").datetimepicker({
+            format: "M/D/YYYY",
+            ignoreReadonly: true
+        });
+        $("#quizTimePicker").datetimepicker({
+            format: "LT",
+            ignoreReadonly: true
+        });
+    });
+
+    function convertDate(date) {
+
+        function pad(n) {
+            return (n < 10) ? '0' + n : n;
+        }
+
+        var re = /-?\d+/; 
+        var m = re.exec(date); 
+        var d = new Date(parseInt(m[0]));
+
+        var hours = d.getHours();
+        var minutes = d.getMinutes();
+        var period = "AM";
+
+        if (hours > 12) {
+            hours -= 12;
+            period = "PM";
+        } else if (hours === 0) {
+            hours = 12;
+        }
+
+        return (d.getMonth() + 1) + "/" + d.getDate() + "/" + d.getFullYear() + " " + pad(hours) + ":" + pad(minutes) + " " + period;
+    }
+</script>
+}

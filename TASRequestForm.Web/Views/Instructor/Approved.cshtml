@@ -1,0 +1,111 @@
+﻿@model IEnumerable<TASRequestForm.Core.Data.Entities.TestTime>
+@{
+    ViewBag.Title = "Approved";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                @{ Html.RenderAction("LoadMenu", "Nav", new { active = "approved" }); }
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <table class="table table-bordered table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Test</th>
+                            <th style="width: 185px">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() == 0)
+                        {
+                            <tr>
+                                <td colspan="5">You have no approved TAS requests.</td>
+                            </tr>
+                        }
+                        @foreach (var test in Model)
+                        {
+                            <tr>
+                                <td>@test.FormEntry.StudentIdentity.LastName, @test.FormEntry.StudentIdentity.FirstName (@test.FormEntry.StudentIdentity.CNumber)</td>
+                                <td>@test.FormEntry.Course</td>
+                                <td>
+                                    @if (test.Canceled)
+                                    {
+                                        <span class="label label-danger">Canceled</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-success">Approved</span>
+                                    }
+                                </td>
+                                <td>@test.Title - @test.Date.ToString()</td>
+                                <td>
+                                    <a href="@Url.Action("View", new { controller = "Instructor", id = test.FormEntry.Id })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                    @if (test.Date >= DateTime.Now && !test.Canceled)
+                                    {
+                                        <a href="@Url.Action("Cancel", new { controller = "Request", id = test.FormEntry.Id })" class="btn btn-danger btnCancel" data-testid="@test.Id" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Cancel", new { controller = "Request", id = test.FormEntry.Id })" class="btn btn-danger disabled" title="Cancel request"><span class="fa fa-close"></span> Cancel</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="alert" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Are you sure?</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txtTestId" />
+                <p>Are you sure you want to cancel this test?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                <button type="button" class="btn btn-success" id="btnSaveChanges">Yes</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#alert").modal({
+                show: false
+            });
+
+            $(".btnCancel").on("click", function (e) {
+                e.preventDefault();
+
+                $("#txtTestId").val($(this).attr("data-testid"));
+                $("#alert").modal("show");
+            });
+
+            $("#btnSaveChanges").on("click", function () {
+                $.ajax({
+                    url: "@Url.Action("Cancel", new { controller = "Request" })/" + $("#txtTestId").val(),
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (data) {
+                        if (data) {
+                            location.reload();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

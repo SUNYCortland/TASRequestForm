@@ -1,0 +1,61 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <p>
+        @Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName,
+        <br /><br />
+        Test Administration Services has approved your request to take the following test(s) for course <em>@Model.Course</em>:
+    </p>
+    @if (Model.QuizTimes.Count > 0)
+    {
+        <h4>Quizzes:</h4>
+        <ul>
+            @foreach (var quiz in Model.QuizTimes)
+            {
+                <li>
+                    @quiz.Title - @quiz.Date.ToString()
+                </li>
+            }
+        </ul>
+    }
+    @if (Model.ExamTimes.Count > 0)
+    {
+        <h4>Exams:</h4>
+        <ul>
+            @foreach (var exam in Model.ExamTimes)
+            {
+                <li>
+                    @exam.Title - @exam.Date.ToString()
+                </li>
+            }
+        </ul>
+    }
+    @if (Model.FinalExamTime != null)
+    {
+        <h4>Final Exams:</h4>
+        <ul>
+            <li>
+                @Model.FinalExamTime.Title - @Model.FinalExamTime.Date.ToString()
+            </li>
+        </ul>
+    }
+    @if (Model.TASNotes.Count > 0)
+    {
+        <p>
+            The following note has been added by Test Administration Services:<br /><br />
+            <blockquote>@Model.TASNotes[0].Value</blockquote>
+        </p>
+    }
+    <p>
+        You will receive an automated email the day before the test(s) as a reminder.
+    </p>
+    <p>
+        You can always <a href="https://webapp.cortland.edu/TASRequestForm/Student/Request/@Model.Id">view/cancel your request</a> at any time.
+    </p>
+</body>
+</html>

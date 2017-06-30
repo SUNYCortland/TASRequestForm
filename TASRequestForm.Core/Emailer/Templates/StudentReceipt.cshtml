@@ -1,0 +1,57 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <p>
+            @Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName,
+            <br /><br />
+            <em>@Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName</em> and Test Administration Services have been notified that you have requested to take the following test(s) for the course <em>@Model.Course</em>:
+        </p>
+        @if (Model.QuizTimes.Count > 0)
+        {
+            <h4>Quizzes:</h4>
+            <ul>
+                @foreach (var quiz in Model.QuizTimes)
+                {
+                    <li>
+                        @quiz.Title - @quiz.Date.ToString()
+                    </li>
+                }
+            </ul>
+        }
+        @if (Model.ExamTimes.Count > 0)
+        {
+            <h4>Exams:</h4>
+            <ul>
+                @foreach (var exam in Model.ExamTimes)
+                {
+                    <li>
+                        @exam.Title - @exam.Date.ToString()
+                    </li>
+                }
+            </ul>
+        }
+        @if (Model.FinalExamTime != null)
+        {
+            <h4>Final Exams:</h4>
+            <ul>
+                <li>
+                    @Model.FinalExamTime.Title - @Model.FinalExamTime.Date.ToString()
+                </li>
+            </ul>
+        }
+        <p>
+            You will receive an email when your instructor has approved or denied your request.
+        </p>
+        <p>
+            If you are scheduling the test(s) with less than 5 business days notice, you will receive another email when Test Administration Services has approved or denied your request.
+        </p>
+        <p>
+            You can always <a href="https://webapp.cortland.edu/TASRequestForm/Student/Request/@Model.Id">view/cancel your request</a> at any time.
+        </p>
+    </body>
+</html>

@@ -1,0 +1,20 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model IList<Note>
+
+@if (Model.Count == 0)
+{
+    <p>
+        No private notes have been added to this request.
+    </p>
+}
+@foreach (var note in Model.OrderByDescending(x => x.AddedDate))
+{
+    <strong class="small">@note.AddedByIdentity.FirstName @note.AddedByIdentity.LastName (@note.Type.ToUpper()) says:</strong>
+    <div class="alert" style="background-color: #f9f9f9; border: 1px solid #ddd; padding-bottom:20px; margin-top: 5px">
+        <p class="small">
+            @note.Value
+        </p>
+        <small class="pull-right" style="font-size: 12px"><em>@note.AddedDate</em></small>
+    </div>
+    <hr />
+}

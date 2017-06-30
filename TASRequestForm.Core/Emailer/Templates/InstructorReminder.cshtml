@@ -1,0 +1,21 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model TestTime
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <p>
+        Professor @Model.FormEntry.ProfessorIdentity.FirstName @Model.FormEntry.ProfessorIdentity.LastName,
+        <br /><br />
+        This is an automated reminder to deliver a test <em>@Model.Title</em> for course <em>@Model.FormEntry.Course</em> scheduled on @Model.Date.ToString() for student <em>@Model.FormEntry.StudentIdentity.FirstName @Model.FormEntry.StudentIdentity.LastName (@Model.FormEntry.StudentIdentity.CNumber)</em> to TAS via <strong>@Model.FormEntry.DeliveryType</strong>.
+    </p>
+    <p>
+        If you have already delivered this test, please ignore this email.
+    </p>
+    <p>
+        You may always <a href="https://webapp.cortland.edu/TasRequestForm">view all of your student requests</a>.
+    </p>
+</body>
+</html>

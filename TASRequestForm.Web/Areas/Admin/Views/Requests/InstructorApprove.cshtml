@@ -1,0 +1,511 @@
+﻿@model TASRequestForm.Web.Areas.Admin.ViewModels.RequestsInstructorApproveViewModel
+
+@{
+    ViewBag.Title = "Request";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container-fluid cort-white">
+        <div class="container">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    @{ Html.RenderAction("LoadMenu", "Nav", new { active = "Pending", area = "Admin" }); }
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                    <h1 class="page-header" style="margin-top: 0;">Test Administration Services (TAS) Request Form</h1>
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="txtStudentName" class="control-label">Student Name</label>
+                                            <input type="text" id="txtStudentName" class="form-control" value="@Model.FormEntry.StudentIdentity.FirstName @Model.FormEntry.StudentIdentity.LastName" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="txtStudentCNumber" class="control-label">C#</label>
+                                            <input type="text" id="txtStudentCNumber" class="form-control" value="@Model.FormEntry.StudentIdentity.CNumber" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => x.FormEntry.PhoneNumber, new { @class = "control-label" })
+                                            @Html.TextBoxFor(x => x.FormEntry.PhoneNumber, new { @class = "form-control", placeholder = "xxx-xxx-xxxx", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => x.FormEntry.Course, new { @class = "control-label" })
+                                            @Html.TextBoxFor(x => x.FormEntry.Course, new { @class = "form-control", @readonly = true })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="FormEntry_CourseTime" class="control-label">Class times:</label>
+                                            @Html.TextBoxFor(x => x.FormEntry.CourseTime, new { @class = "form-control", placeholder = "Please select a course first...", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Date Submitted</label>
+                                    <input class="form-control" type="text" value="@Model.FormEntry.DateSubmitted.ToString()" readonly="readonly" />
+                                </div>
+                                <label class="control-label">Accommodations</label>
+                                @if (Model.FormEntry.GeneralAccomodations.Count == 0)
+                                {
+                                    <p>
+                                        No accommodations were selected.
+                                    </p>
+                                }
+                                @foreach (var accomodation in Model.FormEntry.GeneralAccomodations)
+                                {
+                                    <div class="checkbox small">
+                                        <label>
+                                            <input type="checkbox" checked disabled /> @accomodation.Value
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr style="margin-top: 10px;" />
+                            </div>
+                            @if (Model.FormEntry.QuizTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <center>Quizzes</center>
+                                                    <p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var quizTime in Model.FormEntry.QuizTimes)
+                                            {
+                                                <tr>
+                                                    @if (quizTime.Canceled)
+                                                    {
+                                                        <td class="alert-danger">
+                                                            <span>@quizTime.Title - @quizTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>@quizTime.Title - @quizTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.FormEntry.ExamTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><center>Exams</center><p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var examTime in Model.FormEntry.ExamTimes)
+                                            {
+                                                <tr>
+                                                    @if (examTime.Canceled)
+                                                    {
+                                                        <td class="alert-danger">
+                                                            <span>@examTime.Title - @examTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>@examTime.Title - @examTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.FormEntry.FinalExamTime != null)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><center>Final Exam</center><p class="small" style="font-weight: normal">Date &amp; Time - must be completed between 8:00 a.m. and 4:00 p.m.</p></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                @if (Model.FormEntry.FinalExamTime.Canceled)
+                                                {
+                                                    <td class="alert-danger">
+                                                        <span>@Model.FormEntry.FinalExamTime.Title - @Model.FormEntry.FinalExamTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>@Model.FormEntry.FinalExamTime.Title - @Model.FormEntry.FinalExamTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr style="margin-top: 0px;" />
+                            </div>
+                            @if (Model.FormEntry.QuizTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">For quizzes, student may use:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.BookQuizAccomodation) Book
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NotesQuizAccomodation) Notes
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.CalculatorQuizAccomodation) Calculator
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.FormulaeQuizAccomodation) Formulae
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.OtherQuizAccomodation) Other
+                                                        </label>
+                                                    </div>
+                                                    @if (Model.OtherQuizAccomodation)
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherQuizAccomodationString, new { @class = "form-control", placeholder = "Please enter a quiz accomodation." })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherQuizAccomodationString, new { @class = "form-control", placeholder = "Please enter a quiz accomodation.", style = "display: none;" })
+                                                    }
+                                                    @Html.ValidationMessageFor(x => x.OtherQuizAccomodationString)
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NoQuizAccomodation) None
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.FormEntry.ExamTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">For exams, student may use:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.BookExamAccomodation) Book
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NotesExamAccomodation) Notes
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.CalculatorExamAccomodation) Calculator
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.FormulaeExamAccomodation) Formulae
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.OtherExamAccomodation) Other
+                                                        </label>
+                                                    </div>
+                                                    @if (Model.OtherExamAccomodation)
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherExamAccomodationString, new { @class = "form-control", placeholder = "Please enter an exam accomodation." })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherExamAccomodationString, new { @class = "form-control", placeholder = "Please enter an exam accomodation.", style = "display: none;" })
+                                                    }
+                                                    @Html.ValidationMessageFor(x => x.OtherExamAccomodationString)
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NoExamAccomodation) None
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.FormEntry.FinalExamTime != null)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">For final exam, student may use:</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.BookFinalExamAccomodation) Book
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NotesFinalExamAccomodation) Notes
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.CalculatorFinalExamAccomodation) Calculator
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.FormulaeFinalExamAccomodation) Formulae
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.OtherFinalExamAccomodation) Other
+                                                        </label>
+                                                    </div>
+                                                    @if (Model.OtherFinalExamAccomodation)
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherFinalExamAccomodationString, new { @class = "form-control", placeholder = "Please enter a final exam accomodation." })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.TextBoxFor(x => x.OtherFinalExamAccomodationString, new { @class = "form-control", placeholder = "Please enter a final exam accomodation.", style = "display: none;" })
+                                                    }
+                                                    @Html.ValidationMessageFor(x => x.OtherFinalExamAccomodationString)
+                                                </td>
+                                                <td>
+                                                    <div class="checkbox small">
+                                                        <label>
+                                                            @Html.CheckBoxFor(x => x.NoFinalExamAccomodation) None
+                                                        </label>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr style="margin-top: 0px;" />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <p>
+                                    The test will be delivered to TAS by:
+                                    <label class="radio-inline" style="margin-left: 10px;">
+                                        @Html.RadioButtonFor(x => x.FormEntry.DeliveryType, "Instructor", new { @checked = true }) Instructor
+                                    </label>
+                                    <label class="radio-inline">
+                                        @Html.RadioButtonFor(x => x.FormEntry.DeliveryType, "Email") Email (tas@cortland.edu)
+                                    </label>
+                                </p>
+                                <p>
+                                    It will be returned by:
+                                    <div class="radio">
+                                        <label>
+                                            @Html.RadioButtonFor(x => x.FormEntry.ReturnType, "Instructor pick-up", new { @checked = true }) Instructor pick-up
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            @Html.RadioButtonFor(x => x.FormEntry.ReturnType, "Scan, email, and campus mail original") Scan, email, and campus mail original
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label>
+                                            @Html.RadioButtonFor(x => x.FormEntry.ReturnType, "Scan, email, and retain original exam for the semester") Scan, email, and retain original exam for the semester
+                                        </label>
+                                    </div>
+                                </p>
+                                <p>
+                                    Remind me to deliver test(s) @Html.TextBoxFor(x => x.FormEntry.ReminderDays, new { type = "number", min = "0", step = "1", style = "width: 40px;" }) days before test date.
+                                    <br />
+                                    <span class="small"><em>Note: Leave field blank for no reminder. Select 0 to be reminded the morning of the exam.</em></span>
+                                </p>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.FormEntry.ProfessorEmail, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.FormEntry.ProfessorEmail, new { @class = "form-control", placeholder = "Please enter your email address.", @Value = Model.FormEntry.ProfessorIdentity.NetId + "@cortland.edu" })
+                                    @Html.ValidationMessageFor(x => x.FormEntry.ProfessorEmail)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.FormEntry.ProfessorCampusAddress, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.FormEntry.ProfessorCampusAddress, new { @class = "form-control", placeholder = "Please enter your campus mailing address." })
+                                    @Html.ValidationMessageFor(x => x.FormEntry.ProfessorCampusAddress)
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.FormEntry.ProfessorReachedBy, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.FormEntry.ProfessorReachedBy, new { @class = "form-control", placeholder = "How may we reach you? (phone, email, etc.)" })
+                                    @Html.ValidationMessageFor(x => x.FormEntry.ProfessorReachedBy)
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h4 class="page-header" style="margin-top: 10px;">Notes (viewable by student, instructor, and Test Administration staff)</h4>
+                                <p class="small">
+                                    Please indicate in a note below any other important information about the exam for the student and TAS staff. Do you require a certain scantron? Are you giving the rest of the class less than the full class time to finish the test? Etc.
+                                </p>
+                                @if (Model.FormEntry.Notes.Count == 0)
+                                {
+                                    <p>
+                                        No notes have been added to this request.
+                                    </p>
+                                }
+                                @foreach (var note in Model.FormEntry.Notes)
+                                {
+                                    <strong class="small">@note.AddedByIdentity.FirstName @note.AddedByIdentity.LastName (@note.Type.ToUpper()) says:</strong>
+                                    <div class="alert" style="background-color: #f9f9f9; border: 1px solid #ddd; padding-bottom:20px; margin-top: 5px">
+                                        <p class="small">
+                                            @note.Value
+                                        </p>
+                                        <small class="pull-right" style="font-size: 12px"><em>@note.AddedDate</em></small>
+                                    </div>
+                                    <hr />
+                                }
+                                @Html.ValidationMessageFor(x => x.Note)
+                                @Html.TextAreaFor(x => x.Note, new { rows = "5", placeholder = "Enter any notes you would like to attach to this request. If a request is declined, this note will be emailed to the student.", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 40px; margin-top: 15px;">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                @Html.CheckBoxFor(x => x.Denied, new { style = "display: none;" })
+                                <input type="submit" class="btn btn-success" value="Approve Request" />
+                                <input type="submit" id="btnDenyRequest" class="btn btn-danger" value="Deny Request" />
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#OtherQuizAccomodation").on("change", function () {
+            $("#OtherQuizAccomodationString").toggle();
+        });
+
+        $("#OtherExamAccomodation").on("change", function () {
+            $("#OtherExamAccomodationString").toggle();
+        });
+
+        $("#OtherFinalExamAccomodation").on("change", function () {
+            $("#OtherFinalExamAccomodationString").toggle();
+        });
+
+        $("#btnDenyRequest").on("click", function () {
+            $("#Denied").prop("checked", true);
+        });
+    })
+    </script>
+}

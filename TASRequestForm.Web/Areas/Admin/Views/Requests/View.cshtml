@@ -1,0 +1,434 @@
+﻿@model TASRequestForm.Core.Data.Entities.FormEntry
+
+@{
+    ViewBag.Title = "View";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container-fluid cort-white">
+        <div class="container">
+            <div class="row" style="margin-top: 20px;">
+                <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                    @if (!Model.ProfessorApprovedDate.HasValue || !Model.ApprovedDate.HasValue)
+                    {
+                        { Html.RenderAction("LoadMenu", "Nav", new { active = "pending", area = "Admin" }); }
+                    }
+                    @if (Model.TASApproved)
+                    {
+                        { Html.RenderAction("LoadMenu", "Nav", new { active = "approved", area = "Admin" }); }
+                    }
+                    @if ((!Model.ProfessorApproved && Model.ProfessorApprovedDate.HasValue) || (!Model.TASApproved && Model.ApprovedDate.HasValue))
+                    {
+                        { Html.RenderAction("LoadMenu", "Nav", new { active = "declined", area = "Admin" }); }
+                    }
+                </div>
+                <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                    @if (!Model.ProfessorApprovedDate.HasValue || !Model.ApprovedDate.HasValue)
+                    {
+                        <div class="alert alert-warning">
+                            <h2>Pending Action Required</h2>
+                            <p>
+                                This request is currently pending approval by the instructor or Test Administration Services.
+                                <br />
+                                Please check back at a later time.
+                            </p>
+                        </div>
+                    }
+                    @if (Model.TASApproved)
+                    {
+                        <div class="alert alert-success">
+                            <h2>Request Approved</h2>
+                            <p>
+                                This request has been approved by the instructor and Test Administration Services.
+                            </p>
+                        </div>
+                    }
+                    @if ((!Model.ProfessorApproved && Model.ProfessorApprovedDate.HasValue) || (!Model.TASApproved && Model.ApprovedDate.HasValue))
+                    {
+                        <div class="alert alert-danger">
+                            <h2>Request Denied</h2>
+                            <p>
+                                This request has been denied. Please see the notes at the bottom of the page which indicate the reason for the denial.
+                            </p>
+                        </div>
+                    }
+                    <fieldset>
+                        <div class="row">
+                            <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="txtStudentName" class="control-label">Student Name</label>
+                                            <input type="text" id="txtStudentName" class="form-control" value="@Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="txtStudentCNumber" class="control-label">C#</label>
+                                            <input type="text" id="txtStudentCNumber" class="form-control" value="@Model.StudentIdentity.CNumber" readonly />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => x.PhoneNumber, new { @class = "control-label" })
+                                            @Html.TextBoxFor(x => x.PhoneNumber, new { @class = "form-control", placeholder = "No phone number was entered.", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            @Html.LabelFor(x => x.Course, new { @class = "control-label" })
+                                            @Html.TextBoxFor(x => x.Course, new { @class = "form-control", placholder = "No course was selected.", @readonly = true })
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="form-group">
+                                            <label for="FormEntry_CourseTime" class="control-label">Class times:</label>
+                                            @Html.TextBoxFor(x => x.CourseTime, new { @class = "form-control", placeholder = "No class time was selected.", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label">Date Submitted</label>
+                                    <input class="form-control" type="text" value="@Model.DateSubmitted.ToString()" readonly="readonly" />
+                                </div>
+                                <label class="control-label">Accommodations</label>
+                                @if (Model.GeneralAccomodations.Count == 0)
+                                {
+                                    <p>
+                                        No accommodations were selected.
+                                    </p>
+                                }
+                                @foreach (var accomodation in Model.GeneralAccomodations)
+                                {
+                                    <div class="checkbox small">
+                                        <label>
+                                            <input type="checkbox" checked disabled /> @accomodation.Value
+                                        </label>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr />
+                            </div>
+                            @if (Model.QuizTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2">
+                                                    <center>Quizzes</center>
+                                                    <p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var quizTime in Model.QuizTimes)
+                                            {
+                                                <tr>
+                                                    @if (quizTime.Canceled)
+                                                    {
+                                                        <td class="alert-danger">
+                                                            <span>@quizTime.Title - @quizTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>@quizTime.Title - @quizTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                        </td>
+                                                    }
+                                                    @if (quizTime.NoShow)
+                                                    {
+                                                        <td>
+                                                            <div class="checkbox small">
+                                                                <label>
+                                                                    <input type="checkbox" checked="" disabled=""> No show
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <a class="btn btn-danger" href="@Url.Action("NoShowTest", new { controller = "Requests", area = "Admin", id = quizTime.Id })">No show</a>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.ExamTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"><center>Exams</center><p class="small" style="font-weight: normal">Dates &amp; Times - must be completed between 8:00 a.m. and 4:00 p.m.</p></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.ExamTimes.Count == 0)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <span>No exam times were entered.</span>
+                                                    </td>
+                                                </tr>
+                                            }
+                                            @foreach (var examTime in Model.ExamTimes)
+                                            {
+                                                <tr>
+                                                    @if (examTime.Canceled)
+                                                    {
+                                                        <td class="alert-danger">
+                                                            <span>@examTime.Title - @examTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <span>@examTime.Title - @examTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                        </td>
+                                                    }
+                                                    @if (examTime.NoShow)
+                                                    {
+                                                        <td>
+                                                            <div class="checkbox small">
+                                                                <label>
+                                                                    <input type="checkbox" checked="" disabled=""> No show
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <a class="btn btn-danger" href="@Url.Action("NoShowTest", new { controller = "Requests", area = "Admin", id = examTime.Id })">No show</a>
+                                                        </td>
+                                                    }
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                            @if (Model.FinalExamTime != null)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th colspan="2"><center>Final Exam</center><p class="small" style="font-weight: normal">Date &amp; Time - must be completed between 8:00 a.m. and 4:00 p.m.</p></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                @if (Model.FinalExamTime.Canceled)
+                                                {
+                                                    <td class="alert-danger">
+                                                        <span>@Model.FinalExamTime.Title - @Model.FinalExamTime.Date.ToString("M/d/yyyy h:mm tt") (CANCELED)</span>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <span>@Model.FinalExamTime.Title - @Model.FinalExamTime.Date.ToString("M/d/yyyy h:mm tt")</span>
+                                                    </td>
+                                                }
+                                                @if (Model.FinalExamTime.NoShow)
+                                                {
+                                                    <td>
+                                                        <div class="checkbox small">
+                                                            <label>
+                                                                <input type="checkbox" checked="" disabled=""> No show
+                                                            </label>
+                                                        </div>
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>
+                                                        <a class="btn btn-danger" href="@Url.Action("NoShowTest", new { controller = "Requests", area = "Admin", id = Model.FinalExamTime.Id })">No show</a>
+                                                    </td>
+                                                }
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr />
+                            </div>
+                            @if (Model.QuizTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="control-label">For quizzes, students may use:</label>
+                                    @if (Model.QuizAccomodations.Count == 0)
+                                    {
+                                        <p class="small">
+                                            No quiz accomodations were selected.
+                                        </p>
+                                    }
+                                    @foreach (var accomodation in Model.QuizAccomodations.OrderBy(x => x.Value))
+                                    {
+                                        <div class="checkbox small">
+                                            <label>
+                                                <input type="checkbox" checked disabled /> @accomodation.Value
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.ExamTimes.Count > 0)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="control-label">For exams, students may use:</label>
+                                    @if (Model.ExamAccomodations.Count == 0)
+                                    {
+                                        <p class="small">
+                                            No exam accomodations were selected.
+                                        </p>
+                                    }
+                                    @foreach (var accomodation in Model.ExamAccomodations.OrderBy(x => x.Value))
+                                    {
+                                        <div class="checkbox small">
+                                            <label>
+                                                <input type="checkbox" checked disabled /> @accomodation.Value
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.FinalExamTime != null)
+                            {
+                                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                    <label class="control-label">For final exam, students may use:</label>
+                                    @if (Model.FinalExamAccomodations.Count == 0)
+                                    {
+                                        <p class="small">
+                                            No final exam accomodations were selected.
+                                        </p>
+                                    }
+                                    @foreach (var accomodation in Model.FinalExamAccomodations.OrderBy(x => x.Value))
+                                    {
+                                        <div class="checkbox small">
+                                            <label>
+                                                <input type="checkbox" checked disabled /> @accomodation.Value
+                                            </label>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <hr />
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <p>
+                                    <strong>The test will be delivered to TAS by</strong>: <span class="small">@Model.DeliveryType</span>
+                                </p>
+                                <p>
+                                    <strong>It will be returned by</strong>: <span class="small">@Model.ReturnType</span>
+                                </p>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                <div class="form-group">
+                                    <label for="txtInstructorName" class="control-label">Instructor Name</label>
+                                    <input type="text" id="txtInstructorName" class="form-control" value="@Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName" readonly="readonly" />
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.ProfessorEmail, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.ProfessorEmail, new { @class = "form-control", placeholder = "No email address was entered", @Value = Model.ProfessorEmail, @readonly = "readonly" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.ProfessorCampusAddress, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.ProfessorCampusAddress, new { @class = "form-control", placeholder = "No campus address was entered.", @Value = Model.ProfessorCampusAddress, @readonly = "readonly" })
+                                </div>
+                                <div class="form-group">
+                                    @Html.LabelFor(x => x.ProfessorReachedBy, new { @class = "control-label" })
+                                    @Html.TextBoxFor(x => x.ProfessorReachedBy, new { @class = "form-control", placeholder = "How may we reach you? (phone, email, etc.)", @Value = Model.ProfessorReachedBy, @readonly = "readonly" })
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h4 class="page-header" style="margin-top: 10px;">Notes (viewable by student, instructor, and Test Administration staff)</h4>
+                                @if (Model.PublicNotes.Count == 0)
+                                {
+                                    <p>
+                                        No notes have been added to this request.
+                                    </p>
+                                }
+                                @foreach (var note in Model.PublicNotes)
+                                {
+                                    <strong class="small">@note.AddedByIdentity.FirstName @note.AddedByIdentity.LastName (@note.Type.ToUpper()) says:</strong>
+                                    <div class="alert" style="background-color: #f9f9f9; border: 1px solid #ddd; padding-bottom:20px; margin-top: 5px">
+                                        <p class="small">
+                                            @note.Value
+                                        </p>
+                                        <small class="pull-right" style="font-size: 12px"><em>@note.AddedDate</em></small>
+                                    </div>
+                                    <hr />
+                                }
+
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h4 class="page-header" style="margin-top: 10px;">Private Notes (viewable by Test Administration staff)</h4>
+                                <section id="private-notes">
+                                    @Html.Partial("_PrivateNotes", Model.PrivateNotes)
+                                </section>
+                                <textarea id="txtPrivateNote" rows="5" placeholder="Enter any private notes you'd like to attach to this request." class="form-control"></textarea>
+                                <button id="btnAddNote" type="button" class="btn btn-success pull-right" style="margin-top: 10px; margin-bottom: 20px"><span class="fa fa-plus"></span> Add Note</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+    <script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnAddNote").on("click", function () {
+            var note = $("#txtPrivateNote").val();
+
+            if (note != null && note != "") {
+                $(this).addClass("disabled");
+
+                $.ajax({
+                    url: "@Url.Action("AddPrivateNote", new { id = Model.Id })",
+                    type: "POST",
+                    dataType: "html",
+                    data: {
+                        Note: note
+                    },
+                    success: function (html) {
+                        $("#private-notes").html(html);
+                    },
+                    complete: function () {
+                        $("#btnAddNote").removeClass("disabled");
+                        $("#txtPrivateNote").val("");
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        alert("Something went wrong trying to add your note. Please try again.");
+                    }
+                })
+            }
+        });
+    })
+    </script>
+}

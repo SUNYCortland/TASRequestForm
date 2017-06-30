@@ -1,0 +1,32 @@
+﻿@model TASRequestForm.Web.Areas.Admin.ViewModels.NavLoadMenuViewModel
+
+<div class="list-group">
+    <a class="list-group-item @(Model.Active.ToLower() == "home" ? "active" : "")" href="@Url.Action("Index", new { controller = "Home", area = "" })">
+        <span class="fa fa-home"></span> Home
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "submit" ? "active" : "")" href="@Url.Action("Submit", new { controller = "Requests", area = "Admin" })">
+        <span class="fa fa-pencil-square-o"></span> Submit <span class="hidden-sm hidden-xs">Manual</span> Request
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "pending" ? "active" : "")" href="@Url.Action("Pending", new { controller = "Requests", area = "Admin" })">
+        <span class="fa fa-refresh"></span> Pending <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.PendingCount</span>
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "approved" ? "active" : "")" href="@Url.Action("Approved", new { controller = "Requests", area = "Admin" })">
+        <span class="fa fa-check"></span> Approved <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.ApprovedCount</span>
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "declined" ? "active" : "")" href="@Url.Action("Declined", new { controller = "Requests", area = "Admin" })">
+        <span class="fa fa-close"></span> Declined <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.DeclinedCount</span>
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "calendar" ? "active" : "")" href="@Url.Action("Index", new { controller = "Calendar", area = "Admin" })">
+        <span class="fa fa-calendar"></span> Calendar
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "search" ? "active" : "")" href="@Url.Action("Index", new { controller = "Search", area = "Admin" })">
+        <span class="fa fa-search"></span> Search
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "reports" ? "active" : "")" href="https://reporting.cortland.edu">
+        <span class="fa fa-file-text-o"></span> Reports
+    </a>
+    <a class="list-group-item @(Model.Active.ToLower() == "admin" ? "active" : "")" href="@Url.Action("Index", new { controller = "Home", area = "Admin" })">
+        <span class="fa fa-gear"></span> Admin
+    </a>
+</div>
+

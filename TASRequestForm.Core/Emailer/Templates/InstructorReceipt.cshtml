@@ -1,0 +1,57 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <p>
+        Professor @Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName,
+        <br /><br />
+        <em>@Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName</em> has requested to take the following test(s) for the course <em>@Model.Course</em>:
+    </p>
+    @if (Model.QuizTimes.Count > 0)
+    {
+        <h4>Quizzes:</h4>
+        <ul>
+            @foreach (var quiz in Model.QuizTimes)
+            {
+                <li>
+                    @quiz.Title - @quiz.Date.ToString()
+                </li>
+            }
+        </ul>
+    }
+    @if (Model.ExamTimes.Count > 0)
+    {
+        <h4>Exams:</h4>
+        <ul>
+            @foreach (var exam in Model.ExamTimes)
+            {
+                <li>
+                    @exam.Title - @exam.Date.ToString()
+                </li>
+            }
+        </ul>
+    }
+    @if (Model.FinalExamTime != null)
+    {
+        <h4>Final Exams:</h4>
+        <ul>
+            <li>
+                @Model.FinalExamTime.Title - @Model.FinalExamTime.Date.ToString()
+            </li>
+        </ul>
+    }
+    <p>
+        <strong>Please ensure the above date and time is acceptable</strong> and follow this link to <a href="https://webapp.cortland.edu/TasRequestForm/Instructor/Request/@Model.Id">approve or deny this request</a> and provide additional information for Test Administration staff in the <a href="https://webapp.cortland.edu/TasRequestForm/">Test Administration Scheduling System</a>.
+    </p>
+    <p>
+        You may read more about Test Administration Services and the online scheduling system at the <a href="http://www2.cortland.edu/offices/student-development-center/disability-services/test-administration-faculty_copy.dot">Disability Services website</a>.
+    </p>
+    <p>
+        You may always <a href="https://webapp.cortland.edu/TasRequestForm/">view all of your student requests</a> in the <a href="https://webapp.cortland.edu/TasRequestForm/">Test Administration Scheduling System</a>.
+    </p>
+</body>
+</html>

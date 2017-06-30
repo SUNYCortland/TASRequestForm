@@ -1,0 +1,56 @@
+﻿@model TASRequestForm.Web.ViewModels.NavLoadMenuViewModel
+
+<div class="list-group">
+    <a class="list-group-item @(Model.Active.ToLower() == "home" ? "active" : "")" href="@Url.Action("Index", new { controller = "Home" })">
+        <span class="fa fa-home"></span> Home
+    </a>
+    @if (Model.ProfessorEntries.Count == 0)
+    {
+        <a class="list-group-item @(Model.Active.ToLower() == "submit" ? "active" : "")" href="@Url.Action("Index", new { controller = "Request" })">
+            <span class="fa fa-pencil-square-o"></span> Submit <span class="hidden-sm hidden-xs">TAS</span> Request
+        </a>
+    }
+    @if (Model.StudentEntries.Count > 0)
+    {
+        <a class="list-group-item @(Model.Active.ToLower() == "pending" ? "active" : "")" href="@Url.Action("Pending", new { controller = "Student" })">
+            <span class="fa fa-refresh"></span> Pending <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.StudentEntries.Where(x => x.FormEntry != null && !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).Count()</span>
+        </a>
+        <a class="list-group-item @(Model.Active.ToLower() == "approved" ? "active" : "")" href="@Url.Action("Approved", new { controller = "Student" })">
+            <span class="fa fa-check"></span> Approved <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.StudentEntries.Where(x => x.FormEntry != null && x.FormEntry.TASApproved).Count()</span>
+        </a>
+        <a class="list-group-item @(Model.Active.ToLower() == "declined" ? "active" : "")" href="@Url.Action("Declined", new { controller = "Student" })">
+            <span class="fa fa-close"></span> Declined <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.StudentEntries.Where(x => x.FormEntry != null && (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue)).Count()</span>
+        </a>
+    }
+    else if (Model.ProfessorEntries.Count > 0)
+    {
+        <a class="list-group-item @(Model.Active.ToLower() == "pending" ? "active" : "")" href="@Url.Action("Pending", new { controller = "Instructor" })">
+            <span class="fa fa-refresh"></span> Pending <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.ProfessorEntries.Where(x => x.FormEntry != null && !x.FormEntry.ProfessorApprovedDate.HasValue || !x.FormEntry.ApprovedDate.HasValue).Count()</span>
+        </a>
+        <a class="list-group-item @(Model.Active.ToLower() == "approved" ? "active" : "")" href="@Url.Action("Approved", new { controller = "Instructor" })">
+            <span class="fa fa-check"></span> Approved <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.ProfessorEntries.Where(x => x.FormEntry != null && x.FormEntry.ProfessorApproved && x.FormEntry.TASApproved).Count()</span>
+        </a>
+        <a class="list-group-item @(Model.Active.ToLower() == "declined" ? "active" : "")" href="@Url.Action("Declined", new { controller = "Instructor" })">
+            <span class="fa fa-close"></span> Declined <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">@Model.ProfessorEntries.Where(x => x.FormEntry != null && (!x.FormEntry.ProfessorApproved && x.FormEntry.ProfessorApprovedDate.HasValue) || (!x.FormEntry.TASApproved && x.FormEntry.ApprovedDate.HasValue)).Count()</span>
+        </a>
+    }
+    else
+    {
+        <a class="list-group-item disabled" href="#">
+            <span class="fa fa-refresh"></span> Pending <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">0</span>
+        </a>
+        <a class="list-group-item disabled" href="#">
+            <span class="fa fa-check"></span> Approved <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">0</span>
+        </a>
+        <a class="list-group-item disabled" href="#">
+            <span class="fa fa-close"></span> Declined <span class="hidden-sm hidden-xs">Requests</span> <span class="badge">0</span>
+        </a>
+    }
+    @if (User.IsAdmin)
+    {
+        <a class="list-group-item" href="@Url.Action("Index", new { controller = "Home", area = "Admin" })">
+            <span class="fa fa-gear"></span> Admin Dashboard
+        </a>
+    }
+</div>
+

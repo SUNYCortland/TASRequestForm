@@ -1,0 +1,100 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model IEnumerable<TestTime>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+                @{ Html.RenderAction("LoadMenu", "Nav", new { active = "search", area = "Admin" }); }
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8 col-xs-8">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" id="txtQuery" class="form-control" placeholder="Search by student name, student C#, instructor name, etc..." />
+                        <span class="input-group-btn">
+                            <button id="btnSearch" class="btn btn-success" type="button">Search</button>
+                        </span>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped table-hover" style="margin-top: 20px;">
+                    <thead>
+                        <tr>
+                            <th>Student</th>
+                            <th>Instructor</th>
+                            <th>Course</th>
+                            <th>Status</th>
+                            <th>Test</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count() == 0)
+                        {
+                            <tr>
+                                <td colspan="6">No results found.</td>
+                            </tr>
+                        }
+                        @foreach (var test in Model)
+                        {
+                            <tr>
+                                <td>@test.FormEntry.StudentIdentity.LastName, @test.FormEntry.StudentIdentity.FirstName (@test.FormEntry.StudentIdentity.CNumber)</td>
+                                <td>@test.FormEntry.ProfessorIdentity.LastName, @test.FormEntry.ProfessorIdentity.FirstName</td>
+                                <td>@test.FormEntry.Course</td>
+                                <td>
+                                    @if (test.Canceled)
+                                    {
+                                        <span class="label label-danger">Canceled</span>
+                                    }
+                                    else
+                                    {
+                                        if (!test.FormEntry.ProfessorApprovedDate.HasValue)
+                                        {
+                                            <span class="label label-warning">Requires Instructor Approval</span>
+                                        }
+                                        else if (!test.FormEntry.ApprovedDate.HasValue)
+                                        {
+                                            <span class="label label-primary">Requires TAS Approval</span>
+                                        }
+                                        else if ((!test.FormEntry.ProfessorApproved && test.FormEntry.ProfessorApprovedDate.HasValue) || (!test.FormEntry.TASApproved && test.FormEntry.ApprovedDate.HasValue))
+                                        {
+                                            <span class="label label-danger">Declined</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="label label-success">Approved</span>
+                                        }
+                                    }
+                                </td>
+                                <td>@test.Title - @test.Date.ToString()</td>
+                                <td>
+                                    <a href="@Url.Action("View", new { controller = "Requests", id = test.FormEntry.Id, area = "Admin" })" class="btn btn-success" title="View request"><span class="fa fa-eye"></span> View</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#txtQuery").on("keypress", function (e) {
+                var code = e.keyCode || e.which;
+
+                if (code == 13) {
+                    $("#btnSearch").click();
+                }
+            });
+
+            $("#btnSearch").on("click", function () {
+                window.location.href = "@Url.Action("Index", new { controller = "Search", area = "Admin" })?query=" + $("#txtQuery").val();
+            });
+        });
+    </script>
+}

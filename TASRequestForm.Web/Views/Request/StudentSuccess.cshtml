@@ -1,0 +1,31 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+@{
+    ViewBag.Title = "StudentSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px;">
+            <div class="col-lg-12">
+                <div class="alert alert-success" style="margin-top: 20px;">
+                    <h2>Success!</h2>
+                    <p>
+                        <strong>@Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName</strong>,
+                        <br />
+                        Your Test Administration Services Request has been sent to your professor
+                        <em>@Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName</em> for the course <em>@Model.Course</em>.
+                    </p>
+                    <p>
+                        <em>@Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName</em> will review and approve/decline your request and you will hear back as soon as possible.
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Index", new { controller = "Home" })">&laquo; Back to the dashboard</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,529 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit http://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>W:\TASRequestForm</_PublishTargetUrl>
+  </PropertyGroup>
+  <ItemGroup>
+    <File Include="Areas/Admin/Views/Calendar/Index.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Errors/NotAuthorized.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Home/Index.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/Approved.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/Declined.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/InstructorApprove.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/InstructorDenied.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/InstructorSuccess.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/Pending.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/Submit.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/SubmitSuccess.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/TASApprove.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/TASDenied.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/TASSuccess.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/View.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Requests/_PrivateNotes.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Search/Index.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Shared/_Layout.cshtml">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/Shared/_MainNavigationMenu.cshtml">
+      <publishTime>04/18/2017 14:42:35</publishTime>
+    </File>
+    <File Include="Areas/Admin/Views/web.config">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/Antlr3.Runtime.dll">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Castle.Core.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/Castle.Facilities.Logging.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/Castle.Services.Logging.Log4netIntegration.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/Castle.Windsor.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/de/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorApproval.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorBypass.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorDenied.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorReceipt.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorReceiptReminder.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/InstructorReminder.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/StudentReceipt.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/StudentReminder.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/TASApproval.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/Emailer/Templates/TASDenied.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="bin/es/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/FluentNHibernate.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/FluentValidation.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="bin/FluentValidation.Mvc.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/fr/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/Iesi.Collections.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/it/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/ko/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/log4net.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/Microsoft.Web.Infrastructure.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/Newtonsoft.Json.dll">
+      <publishTime>04/18/2017 14:40:53</publishTime>
+    </File>
+    <File Include="bin/NHibernate.dll">
+      <publishTime>04/18/2017 14:40:53</publishTime>
+    </File>
+    <File Include="bin/nl/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/pl/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/pt/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/RazorEngine.dll">
+      <publishTime>04/18/2017 14:40:53</publishTime>
+    </File>
+    <File Include="bin/ru/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/sv/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/System.Net.Http.Formatting.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Helpers.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Http.WebHost.dll">
+      <publishTime>08/27/2015 14:57:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Mvc.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Optimization.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.Razor.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Deployment.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/System.Web.WebPages.Razor.dll">
+      <publishTime>04/18/2017 14:40:52</publishTime>
+    </File>
+    <File Include="bin/TASRequestForm.Common.dll">
+      <publishTime>05/04/2017 15:15:58</publishTime>
+    </File>
+    <File Include="bin/TASRequestForm.Core.dll">
+      <publishTime>05/04/2017 15:15:58</publishTime>
+    </File>
+    <File Include="bin/TASRequestForm.Data.dll">
+      <publishTime>05/04/2017 15:15:59</publishTime>
+    </File>
+    <File Include="bin/TASRequestForm.Dependency.dll">
+      <publishTime>05/04/2017 15:15:59</publishTime>
+    </File>
+    <File Include="bin/TASRequestForm.Web.dll">
+      <publishTime>02/23/2017 11:27:00</publishTime>
+    </File>
+    <File Include="bin/tr/FluentValidation.resources.dll">
+      <publishTime>04/18/2017 14:40:54</publishTime>
+    </File>
+    <File Include="bin/WebGrease.dll">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="Content/css/bootstrap-datetimepicker.min.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/bootstrap.css.map">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/bootstrap.min.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/font-awesome.min.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/fullcalendar.min.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/fullcalendar.print.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/jquery-ui-1.10.3.custom.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/jquery-ui-1.10.3.custom.min.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/jquery.datetimepicker.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/site.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/css/timepicker.css">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/fontawesome-webfont.eot">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/fontawesome-webfont.svg">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/fontawesome-webfont.ttf">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/fontawesome-webfont.woff">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/FontAwesome.otf">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/glyphicons-halflings-regular.eot">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/glyphicons-halflings-regular.svg">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/glyphicons-halflings-regular.woff">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/leaguegothic-regular-webfont.eot">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/leaguegothic-regular-webfont.svg">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/leaguegothic-regular-webfont.ttf">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/fonts/leaguegothic-regular-webfont.woff">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/animated-overlay.gif">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/logo-white-sm.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/logo-white.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/nav-arch.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/rounded-dropshadow.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/sclogo-w-mob.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_flat_0_aaaaaa_40x100.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_flat_75_C00C00_40x100.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_flat_75_ffffff_40x100.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_glass_55_fbf9ee_1x400.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_glass_65_ffffff_1x400.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_glass_75_dadada_1x400.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_glass_75_e6e6e6_1x400.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-bg_glass_95_fef1ec_1x400.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_2e83ff_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_333333_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_454545_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_888888_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_cd0a0a_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Content/images/ui-icons_ffffff_256x240.png">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="favicon.ico">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.eot">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.svg">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.ttf">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="fonts/glyphicons-halflings-regular.woff">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Global.asax">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="log4net.config">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="packages.config">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap-datetimepicker.min.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap.min.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/fullcalendar.min.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/jquery-2.1.1.min.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.10.3.custom.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/jquery-ui-1.10.3.custom.min.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Scripts/jquery.datetimepicker.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.date.extensions.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.date.extensions.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.extensions.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.extensions.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.numeric.extensions.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.numeric.extensions.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.phone.extensions.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.phone.extensions.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.regex.extensions.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/inputmask.regex.extensions.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/jquery.inputmask.bundle.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/jquery.inputmask.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.inputmask/jquery.inputmask.min.js">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Scripts/jquery.ui.timepicker.addon.js">
+      <publishTime>04/18/2017 14:40:48</publishTime>
+    </File>
+    <File Include="Scripts/knockout-3.2.0.debug.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Scripts/knockout-3.2.0.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Scripts/moment.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Scripts/pushy.min.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Scripts/_references.js">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Views/Home/Index.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/Approved.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/Declined.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/InstructorDenied.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/InstructorSuccess.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/Pending.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/Request.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Instructor/View.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Request/Index.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Request/StudentSuccess.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Shared/DisplayTemplates/_BootstrapPagination.cshtml">
+      <publishTime>04/18/2017 14:40:51</publishTime>
+    </File>
+    <File Include="Views/Shared/Error.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Shared/_Layout.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Shared/_MainNavigationMenu.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Student/Approved.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Student/Declined.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Student/Pending.cshtml">
+      <publishTime>04/18/2017 14:40:50</publishTime>
+    </File>
+    <File Include="Views/Student/Request.cshtml">
+      <publishTime>08/08/2016 11:59:50</publishTime>
+    </File>
+    <File Include="Views/Web.config">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Views/_ViewStart.cshtml">
+      <publishTime>04/18/2017 14:40:49</publishTime>
+    </File>
+    <File Include="Web.config">
+      <publishTime>05/04/2017 15:16:00</publishTime>
+    </File>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,30 @@
+﻿@using TASRequestForm.Core.Data.Entities
+@model FormEntry
+
+@{
+    ViewBag.Title = "ProfessorSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid cort-white">
+    <div class="container">
+        <div class="row" style="margin-top: 20px">
+            <div class="col-lg-12">
+                <div class="alert alert-success">
+                    <h2>Success!</h2>
+                    <p>
+                        <strong>@Model.ProfessorIdentity.FirstName @Model.ProfessorIdentity.LastName</strong>,
+                        <br />
+                        You have approved a Test Administration Services Request from the student
+                        <em>@Model.StudentIdentity.FirstName @Model.StudentIdentity.LastName</em> for the course <em>@Model.Course</em>.
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Index", new { controller = "Home" })">&laquo; Back to the dashboard</a>
+                        <br />
+                        <a href="@Url.Action("Pending", new { controller = "Instructor" })">&laquo; Back to the pending requests</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
