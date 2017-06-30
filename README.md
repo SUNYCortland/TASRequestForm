@@ -3,6 +3,14 @@ TAS Request Form
 
 SUNY Cortland Test Administration Services Software
 
+Server Requirements
+=============
+Windows Server 2012 (Can probably use older versions)
+IIS 8 (Again, can probably use previous versions)
+.NET 4.5 installed
+ODBC System DSN to connect to Oracle (the application queries Banner and also it’s own tables in Oracle)
+CAS Single Sign-On
+
 Install
 =============
 
