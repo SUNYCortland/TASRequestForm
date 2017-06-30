@@ -17,6 +17,7 @@ Install
     Add TestEmailAddress key - This is used when debug mode is turned on
 		
 4.) Run the following SQL command to initialize an administrator - replace ADMIN_USER_PIDM with the pidm of any admin accounts:
+    
     INSERT INTO tas_administrators (seq_tas_administrators_id.nextval, ADMIN_USER_PIDM)
     
 5.) Run locally or set up application in IIS.
